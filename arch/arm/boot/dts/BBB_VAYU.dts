@@ -22,13 +22,13 @@
 
 /{
        compatible = "ti,beaglebone", "ti,beaglebone-black";
-       part-number = "BBB_SWIG-Test";
+       part-number = "BBB_VAYU";
        version = "00A0";
 
 /*==== State resources this cape uses ====*/
 exclusive-use = 
 	/* the pin header and pins used */
-	"P8.17"; /* GPIO0_7, for pps input as interrupt */
+	"P8.17"; /* GPIO0_27, for pps input as interrupt */
 	
 
 /*=============== Mux the Pins Right ===================*/
@@ -65,7 +65,7 @@ BTW. The compatible field should match the driver you want to use.*/
 					status 	= "okay";
 					pinctrl-names   = "default";
 					pinctrl-0       = <&gps_pps_pins>;
-					gpios 	= <&gpio1 27 0>;	/* Since the GPIO is in the GPIO Bank 1, pin 27 = P0_27--> GPIO07 */
+					gpios 	= <&gpio1 27 0>;	/* Since the GPIO is in the GPIO Bank 1, pin 27 = P0_27--> GPIO27 */
 					assert-rising-edge;
 				}; 
 			};
