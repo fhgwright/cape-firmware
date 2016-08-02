@@ -1,0 +1,46 @@
+/*
+ * GPS cape
+ * PPS on pin P8.7
+ */
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "ti,beaglebone", "ti,beaglebone-black";
+
+        /* identification */
+        part-number = "BBB_VAYUX";
+        version = "00A0";
+
+        /* state the resources this cape uses */
+        exclusive-use =
+                /* the pin header uses */
+                "P8.7",         /* timer4/GPS PPS   */
+                /* the hardware ip uses */
+                "gpio2_2", /* 0-based counting */
+		"timer4";  /* 0-based counting */
+
+        fragment@0 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        gps_ppsx_pins: pinmux_gps_ppsx_pins {
+				pinctrl-single,pins = <
+				      0x90 0x22 /* P8.7 MODE2 TIMER4 */
+				>;
+			};
+                };
+        };
+
+	fragment@1 {
+		target = <&ocp>;
+                __overlay__ {
+			gpsx_gmtimer {
+				compatible = "pps-gmtimer";
+				status = "okay";
+				timer = <&timer4>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&gps_ppsx_pins>;
+			};
+		};
+	};
+};
