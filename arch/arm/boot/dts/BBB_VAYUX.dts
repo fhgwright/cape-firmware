@@ -1,6 +1,6 @@
 /*
  * GPS cape
- * PPS on pin P8.7
+ * PPS on pin P8.7 (added as modification)
  */
 /dts-v1/;
 /plugin/;
@@ -34,7 +34,7 @@
 	fragment@1 {
 		target = <&ocp>;
                 __overlay__ {
-			gpsx_gmtimer {
+			gps-pps-timer {
 				compatible = "pps-gmtimer";
 				status = "okay";
 				timer = <&timer4>;
