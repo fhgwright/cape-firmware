@@ -1,7 +1,7 @@
 /*
  * Proto cape interfacing to Rubidium reference
- * GPS PPS on pin P8.9
- * Rubidium PPS on pin P8.10
+ * GPS PPS on pin P8.9 (timer5 with TCLKIN@15MHz)
+ * Rubidium PPS on pin P8.10 (timer6)
  * Rubidium clock on pin P9.41
  */
 /dts-v1/;

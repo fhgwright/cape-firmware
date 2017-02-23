@@ -1,6 +1,6 @@
 /*
  * GPS cape
- * PPS on pin P8.7 (added as modification)
+ * PPS on pin P8.7 (timer4) (added as modification)
  */
 /dts-v1/;
 /plugin/;
