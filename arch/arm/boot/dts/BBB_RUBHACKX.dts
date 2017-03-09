@@ -70,13 +70,14 @@
 	fragment@3 {
 		target = <&ocp>;
                 __overlay__ {
-			pps-rub-timer6x {
+			pps-rub-timer6x15 {
 				compatible = "pps-gmtimer";
 				status = "okay";
 				timer = <&timer6>;
 				pinctrl-names = "default";
 				pinctrl-0 = <&rubidium_pps_pins>;
 				use-tclkin = <1>;
+				frequency = <15000000>;
 			};
 		};
 	};
