@@ -41,7 +41,7 @@
 	fragment@1 {
 		target = <&ocp>;
                 __overlay__ {
-			pps-rub-timer6 {
+			pps-rub-timer6x {
 				compatible = "pps-gmtimer";
 				status = "okay";
 				timer = <&timer6>;
