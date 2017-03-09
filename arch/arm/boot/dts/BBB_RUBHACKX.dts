@@ -55,13 +55,14 @@
 	fragment@2 {
 		target = <&ocp>;
                 __overlay__ {
-			pps-gps-timer5x {
+			pps-gps-timer5x15 {
 				compatible = "pps-gmtimer";
 				status = "okay";
 				timer = <&timer5>;
 				pinctrl-names = "default";
 				pinctrl-0 = <&gps_ppsy_pins>;
 				use-tclkin = <1>;
+				frequency = <15000000>;
 			};
 		};
 	};
