@@ -60,7 +60,7 @@ BTW. The compatible field should match the driver you want to use.*/
 	fragment@2 {
 		target = <&ocp>;
 		__overlay__ {			
-				pps {
+				pps-gps-gpio27 {
 					compatible = "pps-gpio";/* PPS-GPIO driver compatiblity*/
 					status 	= "okay";
 					pinctrl-names   = "default";

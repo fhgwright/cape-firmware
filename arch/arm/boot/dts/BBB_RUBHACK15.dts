@@ -54,7 +54,7 @@
 	fragment@2 {
 		target = <&ocp>;
                 __overlay__ {
-			pps-gps-xtimer {
+			pps-gps-timer5 {
 				compatible = "pps-gmtimer";
 				status = "okay";
 				timer = <&timer5>;
@@ -69,7 +69,7 @@
 	fragment@3 {
 		target = <&ocp>;
                 __overlay__ {
-			pps-rubidium-timer {
+			pps-rub-timer6 {
 				compatible = "pps-gmtimer";
 				status = "okay";
 				timer = <&timer6>;
