@@ -17,7 +17,6 @@
                 /* the pin header uses */
                 "P8.7",         /* timer4/GPS PPS   */
                 /* the hardware ip uses */
-                "gpio2_2", /* 0-based counting */
 		"timer4";  /* 0-based counting */
 
         fragment@0 {
