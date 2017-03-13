@@ -22,8 +22,6 @@
 		"P9.41A",       /* TCLKIN   */
 		"P9.41B",       /* tied to TCLKIN   */
                 /* the hardware ip uses */
-                "gpio2_5", /* 0-based counting */
-                "gpio2_4", /* 0-based counting */
 		"timer5",  /* 0-based counting */
 		"timer6";  /* 0-based counting */
 
