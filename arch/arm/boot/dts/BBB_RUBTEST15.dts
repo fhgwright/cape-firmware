@@ -1,5 +1,6 @@
 /*
- * Proto cape interfacing to Rubidium reference
+ * Proto cape interfacing to Rubidium reference SPECIAL TEST VERSION
+ * ***** DOESN'T WORK YET *****
  * Dummy PPS (-LOCK) on pin P8.13 (gpio23)
  * Dummy PPS (SERVICE) on pin P8.14 (gpio26)
  * Rubidium PPS on pin P8.10 (timer6 with TCLKIN @15MHz)
@@ -25,24 +26,31 @@
 		"P9.41A",       /* TCLKIN   */
 		"P9.41B",       /* tied to TCLKIN   */
                 /* the hardware ip uses */
-                "gpio0_23", /* 0-based counting */
-                "gpio0_26", /* 0-based counting */
-                "gpio2_4", /* 0-based counting */
 		"timer6";  /* 0-based counting */
 
         fragment@0 {
                 target = <&am33xx_pinmux>;
                 __overlay__ {
-                        gps_ppsq_pins: pinmux_gps_ppsq_pins {
+                        gps_ppsf1_pins: pinmux_gps_ppsf1_pins {
 				pinctrl-single,pins = <
-				      0x24 0x27 /* P8.13 MODE7 GPIO23 */
-				      0x28 0x27 /* P8.14 MODE7 GPIO26 */
+				      0x24 0x27 /* P8.13 MODE7 GPIO0_23 */
 				>;
 			};
                 };
         };
 
         fragment@1 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        gps_ppsf2_pins: pinmux_gps_ppsf2_pins {
+				pinctrl-single,pins = <
+				      0x28 0x27 /* P8.14 MODE7 GPIO0_26 */
+				>;
+			};
+                };
+        };
+
+        fragment@2 {
                 target = <&am33xx_pinmux>;
                 __overlay__ {
                         rubidium_pps_pins: pinmux_rubidium_pps_pins {
@@ -55,35 +63,35 @@
                 };
         };
 
-	fragment@2 {
+	fragment@3 {
 		target = <&ocp>;
                 __overlay__ {
 			pps-fake-gpio23 {
 				compatible = "pps-gpio";
 				status = "okay";
 				pinctrl-names = "default";
-				pinctrl-0 = <&gps_ppsq_pins>;
+				pinctrl-0 = <&gps_ppsf1_pins>;
 				gpios = <&gpio1 23 0>;
 				assert-rising-edge;
 			};
 		};
 	};
 
-	fragment@3 {
+	fragment@4 {
 		target = <&ocp>;
                 __overlay__ {
 			pps-fake-gpio26 {
 				compatible = "pps-gpio";
 				status = "okay";
 				pinctrl-names = "default";
-				pinctrl-0 = <&gps_ppsq_pins>;
+				pinctrl-0 = <&gps_ppsf2_pins>;
 				gpios = <&gpio1 26 0>;
 				assert-rising-edge;
 			};
 		};
 	};
 
-	fragment@4 {
+	fragment@5 {
 		target = <&ocp>;
                 __overlay__ {
 			pps-rub-timer6x15 {
