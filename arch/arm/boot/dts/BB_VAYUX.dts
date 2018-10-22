@@ -1,0 +1,66 @@
+/*
+ * GPS cape
+ * PPS on pin P8.17 (gpio27)
+ * PPS on pin P8.7 (timer4) (added as modification)
+ */
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
+
+        /* identification */
+        part-number = "BBB_VAYUX";
+        version = "00A0";
+
+        /* state the resources this cape uses */
+        exclusive-use =
+                /* the pin header uses */
+                "P8.17",        /* GPIO0_27/GPS PPS */
+                "P8.7",         /* timer4/GPS PPS */
+                /* the hardware ip uses */
+		"timer4";  /* 0-based counting */
+
+        fragment@0 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        gps_pps_pins: pinmux_gps_pps_pins {
+				pinctrl-single,pins = <
+				      0x2C 0x27 /* P8.17 MODE7 GPIO0_27 */
+				>;
+			};
+                };
+        };
+
+        fragment@1 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        gps_ppsx_pins: pinmux_gps_ppsx_pins {
+				pinctrl-single,pins = <
+				      0x90 0x22 /* P8.7 MODE2 TIMER4 */
+				>;
+			};
+                };
+        };
+
+	fragment@2 {
+		target = <&ocp>;
+                __overlay__ {
+                        pps-gps-gpio27 {
+                                compatible = "pps-gpio";
+                                status  = "okay";
+                                pinctrl-names   = "default";
+                                pinctrl-0       = <&gps_pps_pins>;
+                                gpios   = <&gpio1 27 0>;  /* gpio1 == GPIO0 */
+                                assert-rising-edge;
+                        };
+			pps-gps-timer4i {
+				compatible = "pps-gmtimer";
+				status = "okay";
+				timer = <&timer4>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&gps_ppsx_pins>;
+			};
+		};
+	};
+};

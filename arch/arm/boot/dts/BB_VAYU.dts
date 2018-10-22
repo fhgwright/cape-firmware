@@ -1,0 +1,74 @@
+/*  
+* Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Purpose License Version 2 as
+* published by the Free Software Foundation
+*
+* Original from: github.com/jadonk/validation-scripts/blob/master/test-capemgr/ 
+*
+* Modified by Derek Molloy for the example on www.derekmolloy.ie
+* that maps GPIO pins for the example
+*
+*/
+/*===================DT Overlay for Yantrr SWIG====================================
+*This overlay is to attach following devices so that VAYU-A Cape can work with BBB 
+* Device Added:
+* 1: Add GPIO  used for PPS input from the Navika 10 module is :  P8_17 (GPIO0_27)
+*/
+
+/dts-v1/;
+/plugin/;
+
+/{
+       compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
+       part-number = "BBB_VAYU";
+       version = "00A0";
+
+/*==== State resources this cape uses ====*/
+exclusive-use = 
+	/* the pin header and pins used */
+	"P8.17"; /* GPIO0_27, for pps input as interrupt */
+	
+
+/*=============== Mux the Pins Right ===================*/
+/*The target to overlay is am33xx_pinmux.
+* This is compatible with the driver “KERNEL/drivers/pinctrl/pinctrl-single” */
+
+       fragment@0 {
+             target = <&am33xx_pinmux>;
+            
+             __overlay__ {
+                 gps_pps_pins: pinmux_gps_pps_pins	 {
+			pinctrl-single,pins =	< 
+						0x02c 0x27  	/* P8_17--> GPIO27-->SWPIN_11 --> INPUT  MODE7 internal pulldown*/ 
+								/* OUTPUT  GPIO(mode7) 0x07 pulldown, 0x17 pullup, 0x?f no pullup/down */
+			       					/* INPUT   GPIO(mode7) 0x27 pulldown, 0x37 pullup, 0x?f no pullup/down */
+						>;
+							};                       	  
+             };
+       };
+
+/*=============Enable the device ==================*/
+
+/*============Connect the device to user interface driver ==============*/
+/*To connect the device with a user interface, 
+/*specify the “compatible” field in the “ocp” section. 
+/*ocp stand for On Chip Peripherals, 
+BTW. The compatible field should match the driver you want to use.*/
+
+	fragment@2 {
+		target = <&ocp>;
+		__overlay__ {			
+				pps-gps-gpio27 {
+					compatible = "pps-gpio";/* PPS-GPIO driver compatiblity*/
+					status 	= "okay";
+					pinctrl-names   = "default";
+					pinctrl-0       = <&gps_pps_pins>;
+					gpios 	= <&gpio1 27 0>;	/* Since the GPIO is in the GPIO Bank 1, pin 27 = P0_27--> GPIO27 */
+					assert-rising-edge;
+				}; 
+			};
+		};
+
+};
