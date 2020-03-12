@@ -1,0 +1,66 @@
+/*
+ * mikroBUS Click cape, position 1
+ * INT(PPS) on pin P9.15 (gpio48)
+ * INT(PPS) on pin P8.8 (timer7) (added as modification)
+ */
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
+
+        /* identification */
+        part-number = "BBB_CLICK1X";
+        version = "00A0";
+
+        /* state the resources this cape uses */
+        exclusive-use =
+                /* the pin header uses */
+                "P9.15",        /* GPIO1_16/GPS PPS */
+                "P8.8",         /* timer7/GPS PPS */
+                /* the hardware ip uses */
+		"timer7";  /* 0-based counting */
+
+        fragment@0 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        gps_ppsz_pins: pinmux_gps_ppsz_pins {
+				pinctrl-single,pins = <
+				      0x40 0x27 /* P9.15 MODE7 GPIO1_16 */
+				>;
+			};
+                };
+        };
+
+        fragment@1 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        gps_ppsw_pins: pinmux_gps_ppsw_pins {
+				pinctrl-single,pins = <
+				      0x94 0x22 /* P8.8 MODE2 TIMER7 */
+				>;
+			};
+                };
+        };
+
+	fragment@2 {
+		target = <&ocp>;
+                __overlay__ {
+                        pps-gps-gpio48 {
+                                compatible = "pps-gpio";
+                                status  = "okay";
+                                pinctrl-names   = "default";
+                                pinctrl-0       = <&gps_ppsz_pins>;
+                                gpios   = <&gpio2 16 0>;  /* gpio2 == GPIO1 */
+                                assert-rising-edge;
+                        };
+			pps-gps-timer7i {
+				compatible = "pps-gmtimer";
+				status = "okay";
+				timer = <&timer7>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&gps_ppsw_pins>;
+			};
+		};
+	};
+};
